@@ -1,5 +1,37 @@
-<div class="container-fluid">
+<div class="container-fluid vw-100 vh-100 bg-dark py-5">
+  <div class="container-fluid bg-body-secondary w-75 p-4 rounded-2">
+    <h1 class="mb-3">Users</h1>
 
+    <div class="d-flex gap-2 align-items-center mb-3 border rounded-2 p-2 bg-light">
+      <h6 class="m-0">Sort by</h6>
+      <button class="btn btn-dark btn-sm">Email</button>
+      <button class="btn btn-outline-dark btn-sm me-2">Lastname</button>
+      <h6 class="m-0">Order</h6>
+      <button class="btn btn-dark btn-sm">ASC</button>
+      <button class="btn btn-outline-dark btn-sm">DESC</button>
+    </div>
 
-  
+    <div class="input-group flex-nowrap">
+      <span class="input-group-text" id="filter">&#64;</span>
+      <input
+        type="text"
+        class="form-control bg-light"
+        placeholder="filter by email..."
+        aria-label="filter by email..."
+        aria-describedby="filter"
+      />
+    </div>
+
+    <ul class="list-group mt-3">
+      @for(user of users(); track user) {
+      <li class="list-group-item d-flex justify-content-between">
+        {{ user.firstname }}
+        {{ user.lastname }} | 
+        {{ user.email }}  
+        <button class="btn btn-outline-dark btn-sm">Show</button>
+      </li>
+    }
+    </ul>
+
+  </div>
 </div>
