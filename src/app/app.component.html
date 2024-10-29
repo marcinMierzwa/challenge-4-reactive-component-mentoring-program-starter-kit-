@@ -16,14 +16,14 @@
       <input
         type="text"
         class="form-control bg-light"
-        placeholder="filter by email..."
+        placeholder="Filter by email..."
         aria-label="filter by email..."
         aria-describedby="filter"
       />
     </div>
 
     <ul class="list-group mt-3">
-      @for(user of users(); track user) {
+      @for(user of visibleUsers(); track user) {
       <li class="list-group-item d-flex justify-content-between">
         {{ user.firstname }}
         {{ user.lastname }} | 
