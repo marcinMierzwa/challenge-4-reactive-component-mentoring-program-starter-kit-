@@ -54,13 +54,18 @@
     </div>
 
     <div class="input-group flex-nowrap">
-      <span class="input-group-text" id="filter">&#64;</span>
+      <label class="input-group-text" for="filter">&#64;</label>
       <input
+        (ngModel)="this.filterEmail()"
+        (ngModelChange)="filterEmail.set($event)"
         type="text"
+        name="filter"
+        id="filter"
         class="form-control bg-light"
         placeholder="Filter by email..."
         aria-label="filter by email..."
         aria-describedby="filter"
+        spellcheck="false"
       />
     </div>
 

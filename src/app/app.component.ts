@@ -12,6 +12,7 @@ import { RouterOutlet } from '@angular/router';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { map } from 'rxjs';
 import { NgClass } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 export interface User {
   id: number;
@@ -23,7 +24,7 @@ export interface User {
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, HttpClientModule, NgClass],
+  imports: [RouterOutlet, HttpClientModule, NgClass, FormsModule],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss',
 })
@@ -54,7 +55,12 @@ export class AppComponent {
   sortOrder: WritableSignal<string> = signal('asc');
 
   visibleUsers: Signal<User[]> = computed(() => {
-    return this.users().sort((a: User, b: User) => {
+
+    const filteredUsers = this.users().filter((user: User) => {
+      return user.email.toLowerCase().includes(this.filterEmail().toLowerCase());
+    });
+  
+    return filteredUsers.sort((a: User, b: User) => {
       if (this.sortBy() === 'email' && this.sortOrder() === 'asc') {
         return a.email.localeCompare(b.email);
       }
@@ -67,7 +73,15 @@ export class AppComponent {
       if (this.sortBy() === 'lastname' && this.sortOrder() === 'desc') {
         return b.lastname.localeCompare(a.lastname);
       }
-      return 0;
+      return 0; 
+    });
+  });
+
+  filterEmail: WritableSignal<string> = signal("");
+
+  filteredUsers: Signal<User[]> = computed(() => {
+    return this.users().filter( (user: User) => {
+      return user.email.toLowerCase().includes(this.filterEmail().toLowerCase());
     });
   });
 
@@ -83,10 +97,9 @@ export class AppComponent {
     this.sortOrder.set(option);
   }
 
+
   constructor() {
     effect(() => {
-      console.log('sortBy :', this.sortBy());
-      console.log('sortOrder :', this.sortOrder());
     });
   }
 }
