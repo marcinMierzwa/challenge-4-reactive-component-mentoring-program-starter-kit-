@@ -4,11 +4,53 @@
 
     <div class="d-flex gap-2 align-items-center mb-3 border rounded-2 p-2 bg-light">
       <h6 class="m-0">Sort by</h6>
-      <button class="btn btn-dark btn-sm">Email</button>
-      <button class="btn btn-outline-dark btn-sm me-2">Lastname</button>
+
+      <!-- email-btn -->
+      <button 
+      class="btn btn-sm"
+      [ngClass]="{
+        'btn-dark': sortBy() === 'email',
+        'btn-outline-dark': sortBy() === 'lastname'
+      }"      
+      value="email" 
+      (click)="toggleSortBy($event)"
+      >Email</button>
+
+      <!-- lastname-btn -->
+      <button
+      class="btn  btn-sm me-2" 
+      [ngClass]="{
+        'btn-dark': sortBy() === 'lastname',
+        'btn-outline-dark': sortBy() === 'email'
+      }"      
+      value="lastname" 
+      (click)="toggleSortBy($event)"
+      >Lastname</button>
+      
       <h6 class="m-0">Order</h6>
-      <button class="btn btn-dark btn-sm">ASC</button>
-      <button class="btn btn-outline-dark btn-sm">DESC</button>
+
+      <!-- asc-btn -->
+      <button 
+      class="btn btn-sm" 
+      [ngClass]="{
+        'btn-dark': sortOrder() === 'asc',
+        'btn-outline-dark': sortOrder() === 'desc'
+      }"      
+      value="asc" 
+      (click)="toggleSortOrder($event)"
+      >ASC</button>
+
+      <!-- desc-btn -->
+      <button 
+      class="btn btn-sm"
+      [ngClass]="{
+        'btn-dark': sortOrder() === 'desc',
+        'btn-outline-dark': sortOrder() === 'asc'
+      }"      
+      value="desc" 
+      (click)="toggleSortOrder($event)"
+      >DESC</button>
+
     </div>
 
     <div class="input-group flex-nowrap">
@@ -23,7 +65,7 @@
     </div>
 
     <ul class="list-group mt-3">
-      @for(user of visibleUsers(); track user) {
+      @for (user of visibleUsers(); track user.id) {
       <li class="list-group-item d-flex justify-content-between">
         {{ user.firstname }}
         {{ user.lastname }} | 
