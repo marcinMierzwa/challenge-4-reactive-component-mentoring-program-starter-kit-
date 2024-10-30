@@ -2,55 +2,60 @@
   <div class="container-fluid bg-body-secondary w-75 p-4 rounded-2">
     <h1 class="mb-3">Users</h1>
 
-    <div class="d-flex gap-2 align-items-center mb-3 border rounded-2 p-2 bg-light">
+    <div
+      class="d-flex gap-2 align-items-center mb-3 border rounded-2 p-2 bg-light"
+    >
       <h6 class="m-0">Sort by</h6>
 
-      <!-- email-btn -->
-      <button 
-      class="btn btn-sm"
-      [ngClass]="{
-        'btn-dark': sortBy() === 'email',
-        'btn-outline-dark': sortBy() === 'lastname'
-      }"      
-      value="email" 
-      (click)="toggleSortBy($event)"
-      >Email</button>
-
-      <!-- lastname-btn -->
       <button
-      class="btn  btn-sm me-2" 
-      [ngClass]="{
-        'btn-dark': sortBy() === 'lastname',
-        'btn-outline-dark': sortBy() === 'email'
-      }"      
-      value="lastname" 
-      (click)="toggleSortBy($event)"
-      >Lastname</button>
-      
+        class="btn btn-sm"
+        [ngClass]="{
+          'btn-dark': sortBy() === 'email',
+          'btn-outline-dark': sortBy() === 'lastname'
+        }"
+        value="email"
+        (click)="toggleSortBy($event)"
+      >
+        Email
+      </button>
+
+      <button
+        class="btn btn-sm me-2"
+        [ngClass]="{
+          'btn-dark': sortBy() === 'lastname',
+          'btn-outline-dark': sortBy() === 'email'
+        }"
+        value="lastname"
+        (click)="toggleSortBy($event)"
+      >
+        Lastname
+      </button>
+
       <h6 class="m-0">Order</h6>
 
-      <!-- asc-btn -->
-      <button 
-      class="btn btn-sm" 
-      [ngClass]="{
-        'btn-dark': sortOrder() === 'asc',
-        'btn-outline-dark': sortOrder() === 'desc'
-      }"      
-      value="asc" 
-      (click)="toggleSortOrder($event)"
-      >ASC</button>
+      <button
+        class="btn btn-sm"
+        [ngClass]="{
+          'btn-dark': sortOrder() === 'asc',
+          'btn-outline-dark': sortOrder() === 'desc'
+        }"
+        value="asc"
+        (click)="toggleSortOrder($event)"
+      >
+        ASC
+      </button>
 
-      <!-- desc-btn -->
-      <button 
-      class="btn btn-sm"
-      [ngClass]="{
-        'btn-dark': sortOrder() === 'desc',
-        'btn-outline-dark': sortOrder() === 'asc'
-      }"      
-      value="desc" 
-      (click)="toggleSortOrder($event)"
-      >DESC</button>
-
+      <button
+        class="btn btn-sm"
+        [ngClass]="{
+          'btn-dark': sortOrder() === 'desc',
+          'btn-outline-dark': sortOrder() === 'asc'
+        }"
+        value="desc"
+        (click)="toggleSortOrder($event)"
+      >
+        DESC
+      </button>
     </div>
 
     <div class="input-group flex-nowrap">
@@ -69,16 +74,63 @@
       />
     </div>
 
-    <ul class="list-group mt-3">
-      @for (user of visibleUsers(); track user.id) {
-      <li class="list-group-item d-flex justify-content-between">
-        {{ user.firstname }}
-        {{ user.lastname }} | 
-        {{ user.email }}  
-        <button class="btn btn-outline-dark btn-sm">Show</button>
-      </li>
-    }
-    </ul>
+    <main class="d-flex gap-2 mt-3">
+      @if (visibleUsers().length > 0) {
 
+      <ul class="list-group flex-fill flex-shrink-0" style="min-width: 50%">
+        @for (user of visibleUsers(); track user.id) {
+        <li class="list-group-item d-flex justify-content-between">
+          {{ user.firstname }}
+          {{ user.lastname }} |
+          {{ user.email }}
+
+          <button
+            class="btn btn-outline-dark btn-sm"
+            [ngClass]="{
+              'd-none': this.isDetailsVisible() && user.id === this.userId()
+            }"
+            id="userId"
+            (click)="showUserDetails(user.id)"
+            (click)="this.isDetailsVisible.set(true)"
+          >
+            Show
+          </button>
+
+          <button
+            class="btn btn-outline-danger btn-sm"
+            [ngClass]="{
+              'd-none': !this.isDetailsVisible() || user.id !== this.userId()
+            }"
+            id="userId"
+            (click)="showUserDetails(user.id)"
+            (click)="this.isDetailsVisible.set(false)"
+          >
+            Hide
+          </button>
+        </li>
+
+        }
+      </ul>
+
+      @if (this.isDetailsVisible()) { @if (this.userDetails(); as user) {
+
+      <div class="card w-50 h-25">
+        <div class="card-body">
+          <h5 class="card-title fw-normal">
+            {{ user.firstname }} {{ user.lastname }}
+          </h5>
+          <p class="card-text">Email: {{ user.email }}</p>
+          <button
+            class="btn btn-danger btn-sm"
+            (click)="this.isDetailsVisible.set(!this.isDetailsVisible())"
+          >
+            Hide
+          </button>
+        </div>
+      </div>
+      } } } @else {
+      <h6 class="mx-auto">Loading ...</h6>
+      }
+    </main>
   </div>
 </div>

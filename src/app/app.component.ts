@@ -2,7 +2,6 @@ import { HttpClient, HttpClientModule } from '@angular/common/http';
 import {
   Component,
   computed,
-  effect,
   inject,
   signal,
   Signal,
@@ -53,13 +52,17 @@ export class AppComponent {
 
   sortBy: WritableSignal<string> = signal('email');
   sortOrder: WritableSignal<string> = signal('asc');
+  filterEmail: WritableSignal<string> = signal('');
+  isDetailsVisible: WritableSignal<boolean> = signal(false);
+  userId: WritableSignal<number> = signal(0);
 
   visibleUsers: Signal<User[]> = computed(() => {
-
     const filteredUsers = this.users().filter((user: User) => {
-      return user.email.toLowerCase().includes(this.filterEmail().toLowerCase());
+      return user.email
+        .toLowerCase()
+        .includes(this.filterEmail().toLowerCase());
     });
-  
+
     return filteredUsers.sort((a: User, b: User) => {
       if (this.sortBy() === 'email' && this.sortOrder() === 'asc') {
         return a.email.localeCompare(b.email);
@@ -73,15 +76,13 @@ export class AppComponent {
       if (this.sortBy() === 'lastname' && this.sortOrder() === 'desc') {
         return b.lastname.localeCompare(a.lastname);
       }
-      return 0; 
+      return 0;
     });
   });
 
-  filterEmail: WritableSignal<string> = signal("");
-
-  filteredUsers: Signal<User[]> = computed(() => {
-    return this.users().filter( (user: User) => {
-      return user.email.toLowerCase().includes(this.filterEmail().toLowerCase());
+  userDetails: Signal<User | undefined> = computed(() => {
+    return this.users().find((user: User) => {
+      return this.userId() === user.id;
     });
   });
 
@@ -97,9 +98,7 @@ export class AppComponent {
     this.sortOrder.set(option);
   }
 
-
-  constructor() {
-    effect(() => {
-    });
+  showUserDetails(userId: number): void {
+    this.userId.set(userId);
   }
 }
